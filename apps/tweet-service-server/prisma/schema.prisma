@@ -1,0 +1,36 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Retweet {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  tweet     Tweet?   @relation(fields: [tweetId], references: [id])
+  tweetId   String?
+  updatedAt DateTime @updatedAt
+  user      String?
+}
+
+model Like {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  tweet     Tweet?   @relation(fields: [tweetId], references: [id])
+  tweetId   String?
+  updatedAt DateTime @updatedAt
+  user      String?
+}
+
+model Tweet {
+  content   String?
+  createdAt DateTime  @default(now())
+  id        String    @id @default(cuid())
+  likes     Like[]
+  retweets  Retweet[]
+  updatedAt DateTime  @updatedAt
+  user      String?
+}
